@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-lg-2"></div>
             <div class="col-lg-8">
-                <form>
+                <form id="form">
                     <div class="form-group">
                       <label for="todo">Todo</label>
                       <input type="text" class="form-control" id="todoUserInput" placeholder="Todo">
@@ -30,11 +30,6 @@
             <div class="col-lg-2"></div>
             <div class="col-lg-8">
                 <ul class="list-group" id="display">
-                    <li class="list-group-item">Cras justo odio</li>
-                    <li class="list-group-item">Dapibus ac facilisis in</li>
-                    <li class="list-group-item">Morbi leo risus</li>
-                    <li class="list-group-item">Porta ac consectetur ac</li>
-                    <li class="list-group-item">Vestibulum at eros</li>
                   </ul>
             </div>
             <div class="col-lg-2"></div>
@@ -46,5 +41,50 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script>
+        // HELPER FUNCTIONS TO DISPLAY DATA TO USER
+        $(document).ready(()=>{
+            const display = $("#display");
+            const form = $("#form");
+            const todoUserInput = $("#todoUserInput");
+
+            // Helper function to reset todos
+            const resetTodosInput = ()=>{
+                todoUserInput.val('');
+            }
+
+            const buildIDS = (todo)=>{
+                return {
+                    editID : "edit_" + todo._id,
+                    deleteID : "delete_" + todo._id,
+                    listItemID : "listItem_" + todo_id,
+                    todoID : "todo_" + todo._id
+                }
+            }
+            // Helper function for edit and delete buttons
+            const buildTemplate = (todo,ids)=>{
+                return `<li class="list-group-item" id"${ids.listItemID}>
+                        <div class="row">
+                            <div class="col-md-4" id="${ids.todoID}">${todo.todo}</div>
+                            <div class="col-md-4"></div>
+                            <div class="col-md-4 text-right">
+                                <button type="button" class="btn btn-secondary" id="${ids.editID}">Edit</button>
+                                <button type="button" class="btn btn-danger" id="${ids.deleteID}">Delete</button>
+                            </div>
+                        </div>
+                    </li>`;
+            }
+
+            // Helper function to display todos to user
+            const displayTodos = (data)=>{
+                data.forEach((todo)=>{
+                    let ids = buildIDS(todo);
+                    display.append(buildTemplate(todo,ids));
+                    editTodo(todo,ids.todoID,ids.eidtID);
+                    deleteTodo(todo,ids.listItemID,ids.deleteID);    
+                });
+            }
+        });
+    </script>
   </body>
 </html>

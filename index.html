@@ -48,6 +48,19 @@
             const form = $("#form");
             const todoUserInput = $("#todoUserInput");
 
+            // Making HTTP Get Request to display todos to user using Fetch API
+            const getTodos = ()=>{
+                fetch('/getTodos',{method : 
+                "get"}).then((response)=>{
+                    return response.json();
+                }).then((data)=>{
+                    console.log(data);
+                    displayTodos(data);
+                });
+            }
+
+            getTodos();
+
             // Helper function to reset todos
             const resetTodosInput = ()=>{
                 todoUserInput.val('');
@@ -57,7 +70,7 @@
                 return {
                     editID : "edit_" + todo._id,
                     deleteID : "delete_" + todo._id,
-                    listItemID : "listItem_" + todo_id,
+                    listItemID : "listItem_" + todo._id,
                     todoID : "todo_" + todo._id
                 }
             }
@@ -80,8 +93,8 @@
                 data.forEach((todo)=>{
                     let ids = buildIDS(todo);
                     display.append(buildTemplate(todo,ids));
-                    editTodo(todo,ids.todoID,ids.eidtID);
-                    deleteTodo(todo,ids.listItemID,ids.deleteID);    
+                    // editTodo(todo,ids.todoID,ids.eidtID);
+                    // deleteTodo(todo,ids.listItemID,ids.deleteID);    
                 });
             }
         });

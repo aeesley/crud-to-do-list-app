@@ -31,6 +31,22 @@ app.get('/getTodos',(req,res)=>{
     });
 })
 
+// Route to work with the primary key id
+app.put('/:id',(req,res)=>{
+    // defining the todoID variable from params
+    const todoID = req.params.id;
+    // defining the user input variable from body
+    const userInput = req.body;
+
+    db.getDB().collection(collection).findOneAndUpdate({_id : db.getPrimaryKey(todoID)},{$set : userInput.todo},{returnOriginal : false},(err,result)=>{
+        if(err)
+            console.log(err);
+        else    
+            res.json(result);
+    });
+
+});
+
 db.connect((err)=>{
     if(err){
         console.log('unable to connect to database');

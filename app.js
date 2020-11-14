@@ -58,6 +58,19 @@ app.post('/',(req,res)=>{
     });
 });
 
+// Route to delete to do list items
+app.delete('/:id',(req,res)=>{
+    const todoID = req.params.id;
+
+    db.getDB().collection(collection).findOneAndDelete({_id : db.getPrimaryKey(todoID)},(err,results)=>{
+        if(err)
+            console.log(err);
+        else
+            res.json(result);
+    });
+});
+
+// Dabatase connection
 db.connect((err)=>{
     if(err){
         console.log('unable to connect to database');

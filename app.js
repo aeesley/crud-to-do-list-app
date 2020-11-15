@@ -2,7 +2,7 @@
 const express = require('express');
 const bodyParser = require("body-parser");
 const path = require('path');
-const joi = require('joi');
+const Joi = require('joi');
 
 // Creating instance of express application
 const app = express();
@@ -17,7 +17,7 @@ const collection = "todo";
 
 // SCHEMA
 const schema = Joi.object().keys({
-    todo : Joi.string().require()
+    todo : Joi.string().required()
 });
 
 // ROUTES

@@ -184,12 +184,11 @@
                         deleteTodo(data.document,ids.listItemID,ids.deleteID);
                         displayMessage(true,data.msg);
                     }
-                    else
-                        displayMessage(false,data.error.message);
-                        
-                    resetTodosInput();
                 }
-
+                else
+                    displayMessage(false,data.error.message);
+                        
+                resetTodosInput();
             });
         })
     })

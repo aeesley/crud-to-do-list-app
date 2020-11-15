@@ -33,6 +33,16 @@
                   </ul>
             </div>
             <div class="col-lg-2"></div>
+            <br>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <div class="alert alert-danger" role="alert" id="message">
+ 
+                      </div>
+                </div>
+                <div class="col-lg-2"></div>
+
         </div>
     </div>
 
@@ -47,6 +57,26 @@
             const display = $("#display");
             const form = $("#form");
             const todoUserInput = $("#todoUserInput");
+            const message = $("#message");
+            message.hide();
+
+            // Helper function to display alert messages
+            const displayMessage = (flag,msg)=>{
+                // if successful
+                if(flag){
+                    message.removeClass('alert-danger');
+                    message.addCLass('alert-success');
+                    message.html(msg);
+                    message.show();
+                }
+                // if not successful
+                else{
+                    message.removeClass('alert-success');
+                    message.addCLass('alert-danger');
+                    message.html(msg);
+                    message.show();
+                }
+            }
 
             // Making HTTP Get Request to display todos to user using Fetch API
             const getTodos = ()=>{

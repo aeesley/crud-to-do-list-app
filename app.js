@@ -2,6 +2,7 @@
 const express = require('express');
 const bodyParser = require("body-parser");
 const path = require('path');
+const joi = require('joi');
 
 // Creating instance of express application
 const app = express();
@@ -11,7 +12,13 @@ app.use(bodyParser.json());
 
 // Setting up database
 const db = require("./db");
+const { nextTick } = require('process');
 const collection = "todo";
+
+// SCHEMA
+const schema = Joi.object().keys({
+    todo : Joi.string().require()
+});
 
 // ROUTES
 // Route to show index.html file at /
@@ -48,14 +55,28 @@ app.put('/:id',(req,res)=>{
 });
 
 // Route to post user inputs
-app.post('/',(req,res)=>{
+app.post('/',(req,res,next)=>{
     const userInput = req.body;
-    db.getDB().collection(collection).insertOne(userInput,(err,result)=>{
-        if(err)
-            console.log(err);
-        else   
-            res.json({result : result, document : result.ops[0]});
-    });
+
+    // Validating user input sent from body
+    Joi.validate(userInput,schema,(err,result)=>{
+        if(err){
+            const error = new Error("Invalid Input");
+            error.status = 400;
+            next(error);
+        }
+        else{
+            db.getDB().collection(collection).insertOne(userInput,(err,result)=>{
+                if(err){
+                    const error = new Error("Failed to insert Todo Document");
+                    error.status = 400;
+                    next(error);
+                }else   
+                    res.json({result : result, document : result.ops[0], msg : "Successfully inserted Todo!",error : null});
+            });
+        }
+    })
+
 });
 
 // Route to delete to do list items
@@ -69,6 +90,15 @@ app.delete('/:id',(req,res)=>{
             res.json(result);
     });
 });
+
+// Custom error handler
+app.use((err,req,res,next)=>{
+    res.status(err.status).json({
+        error : {
+            message : err.message
+        }
+    })
+})
 
 // Dabatase connection
 db.connect((err)=>{

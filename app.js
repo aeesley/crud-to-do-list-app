@@ -58,14 +58,15 @@ app.put('/:id',(req,res)=>{
 app.post('/',(req,res,next)=>{
     const userInput = req.body;
 
+    console.log('we hit the route!')
     // Validating user input sent from body
-    Joi.validate(userInput,schema,(err,result)=>{
-        if(err){
-            const error = new Error("Invalid Input");
-            error.status = 400;
-            next(error);
-        }
-        else{
+    //Joi.validate(userInput,schema,(err,result)=>{
+        // if(err){
+        //     const error = new Error("Invalid Input");
+        //     error.status = 400;
+        //     next(error);
+        // }
+        //else{
             db.getDB().collection(collection).insertOne(userInput,(err,result)=>{
                 if(err){
                     const error = new Error("Failed to insert Todo Document");
@@ -74,31 +75,35 @@ app.post('/',(req,res,next)=>{
                 }else   
                     res.json({result : result, document : result.ops[0], msg : "Successfully inserted Todo!",error : null});
             });
-        }
-    })
+       // }
+   // })
 
 });
 
 // Route to delete to do list items
 app.delete('/:id',(req,res)=>{
+    console.log('we hit hte delte!!!!!')
     const todoID = req.params.id;
 
     db.getDB().collection(collection).findOneAndDelete({_id : db.getPrimaryKey(todoID)},(err,results)=>{
         if(err)
             console.log(err);
-        else
-            res.json(result);
+        else {
+            console.log('about ot respond form delete!!!')
+            res.json(results);
+        }
+           
     });
 });
 
 // Custom error handler
-app.use((err,req,res,next)=>{
-    res.status(err.status).json({
-        error : {
-            message : err.message
-        }
-    })
-})
+// app.use((err,req,res,next)=>{
+//     res.status(err.status).json({
+//         error : {
+//             message : err.message
+//         }
+//     })
+// })
 
 // Dabatase connection
 db.connect((err)=>{

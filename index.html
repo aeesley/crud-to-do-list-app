@@ -123,12 +123,15 @@
                 deleteBtn.click(()=>{
                     fetch(`/${todo._id}`,{
                         method: "delete"
-                    }).then((response)=>{
-                        return response.json();
-                    }).then((data)=>{
-                        if(data.ok == 1){
-                            $(`#${listItemID}`).remove();
-                        }
+                    })
+                    // .then((response)=>{
+                    //     return response.json();
+                    // })
+                    .then((data)=>{
+                        console.log('we hi thte .then!!!', listItemID)
+                        //if(data.ok == 1){
+                            $(`#` + listItemID).remove();
+                        //}
                     });
                 })
             }
@@ -143,7 +146,7 @@
             }
             // Helper function for edit and delete buttons
             const buildTemplate = (todo,ids)=>{
-                return `<li class="list-group-item" id"${ids.listItemID}>
+                return `<li class="list-group-item" id="${ids.listItemID}>
                         <div class="row">
                             <div class="col-md-4" id="${ids.todoID}">${todo.todo}</div>
                             <div class="col-md-4"></div>
